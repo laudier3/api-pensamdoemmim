@@ -1,5 +1,5 @@
 <h1 align="center">
-  <center>Prisma: o ORM Node.js que você precisa em 2022
+  <center>Prisma: o ORM Node.js que você precisa em 2024
 </center>
 </h1>
 
@@ -55,9 +55,3 @@ Esse projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE.md) para
 ---
 
 Feito com 💖 José Santana de Jesus 👋 [Entre na nossa comunidade!](laudierst.tk)
-# api-stoque
-# api-store-stylestop
-# api-store-stylestop
-# api-store-stylestop
-# api-store-stylestop
-# api-pensamdoemmim
