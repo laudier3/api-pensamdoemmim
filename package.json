@@ -1,11 +1,11 @@
 {
-  "name": "api-estoque",
+  "name": "api-pensandoemmim",
   "version": "1.0.0",
   "description": "<h1 align=\"center\">   <center>Prisma: o ORM Node.js que você precisa em 2022 </center> </h1>",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon ./src/index.ts",
-    "build": "tsc",
+    "build": "rm -r -f ./dist && tsc",
     "start": "node ./dist/index.js",
     "test": "jest --watch"
   },
