@@ -12,6 +12,6 @@ export class CreatecategoriesController {
       },
     });
 
-    return response.json(categories);
+    return response.status(201).json({msg: "Categoria criada com sucesso!", categories});
   }
 }
