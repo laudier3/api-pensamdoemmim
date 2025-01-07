@@ -7,7 +7,8 @@
     "dev": "nodemon ./src/index.ts",
     "build": "rm -r -f ./dist && tsc",
     "start": "node ./dist/index.js",
-    "test": "jest --watch"
+    "test": "jest --watch",
+    "vercel-build": "npx prisma migrate deploy"
   },
   "dependencies": {
     "@prisma/client": "^4.16.2",
