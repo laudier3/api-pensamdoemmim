@@ -1,16 +1,38 @@
 {
-
     "version": 2,
     "builds": [
-        {
-            "src": "src/index.ts",
-            "use": "@now/node"
-        }
+      {
+        "src": "./src/index.ts",
+        "use": "@vercel/node"
+      }
     ],
     "routes": [
-        {
-            "src": "/(.*)",
-            "dest": "routes/routes.ts"
-        }
+      {
+        "src": "/src/(.*)",
+        "dest": "/index.ts"
+      },
+      {
+        "src": "/src/(.*)",
+        "dest": "/index.ts"
+      }
+    ],
+    "headers": [
+      {
+        "source": "/src/(.*)",
+        "headers": [
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "https://to-my-frontend"
+          },
+          {
+            "key": "Access-Control-Allow-Methods",
+            "value": "GET, POST, PUT, DELETE, OPTIONS"
+          },
+          {
+            "key": "Access-Control-Allow-Headers",
+            "value": "Content-Type, Authorization"
+          }
+        ]
+      }
     ]
-}
+  }
