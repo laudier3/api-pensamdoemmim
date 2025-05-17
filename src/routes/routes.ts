@@ -1,4 +1,21 @@
-import { Router } from "express";
+import { Router, Request, Response, NextFunction  } from "express";
+import jwt from 'jsonwebtoken';
+
+// Token fixo (exemplo)
+const TOKEN_FIXO = process.env.TOKEN_PROTECTION;
+
+function autenticarToken(req: Request, res: Response, next: NextFunction) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1]; // Bearer <token>
+
+    if (!token) return res.status(401).json({ mensagem: 'Token não fornecido' });
+
+    if (token !== TOKEN_FIXO) {
+        return res.status(403).json({ mensagem: 'Token inválido' });
+    }
+
+    next();
+}
 
 //============== importação de class de controller de Productos =================
 import { CreateProductController } from "../controllers/controllerProducts/CreateProductController";
@@ -169,49 +186,49 @@ const ofertasDelete = new ControllerOfertasDelete()
 
 /*=================================== ROTA DE MACKTS =============================*/
 //SLIDS
-router.post("/slids", slidsCreate.handle);
-router.delete("/slids/:id", slidsDelete.handle);
-router.put("/slids", slidsUpdate.handle);
-router.get("/slids", slidsFind.handle);
+router.post("/slids", autenticarToken, slidsCreate.handle);
+router.delete("/slids/:id", autenticarToken, slidsDelete.handle);
+router.put("/slids", autenticarToken, slidsUpdate.handle);
+router.get("/slids", autenticarToken, slidsFind.handle);
 //BANNER
-router.post("/banner", bannerCreate.handle);
-router.delete("/banner/:id", bannerDelete.handle);
-router.put("/banner", bannerFind.handle);
-router.get("/banner", bannerFind.handle);
+router.post("/banner", autenticarToken, bannerCreate.handle);
+router.delete("/banner/:id", autenticarToken, bannerDelete.handle);
+router.put("/banner", autenticarToken, bannerFind.handle);
+router.get("/banner", autenticarToken, bannerFind.handle);
 //PROMOÇÃO
-router.post("/promocao", promocaoCreate.handle);
-router.delete("/promocao/:id", promocaoDelete.handle);
-router.put("/promocao", promocaoUpdate.handle);
-router.get("/promocao", promocaoFind.handle);
+router.post("/promocao", autenticarToken, promocaoCreate.handle);
+router.delete("/promocao/:id",autenticarToken,  promocaoDelete.handle);
+router.put("/promocao", autenticarToken, promocaoUpdate.handle);
+router.get("/promocao", autenticarToken, promocaoFind.handle);
 //OFERTAS
-router.post("/ofertas", ofertasCreate.handle);
-router.delete("/ofertas/:id", ofertasDelete.handle);
-router.put("/ofertas", ofertasUpdate.handle);
-router.get("/ofertas", ofertasFind.handle);
+router.post("/ofertas", autenticarToken, ofertasCreate.handle);
+router.delete("/ofertas/:id", autenticarToken, ofertasDelete.handle);
+router.put("/ofertas", autenticarToken, ofertasUpdate.handle);
+router.get("/ofertas", autenticarToken, ofertasFind.handle);
 
 /*=================================== ROTA DE PRODUCT =============================*/
 
-router.post("/product", createProduct.handle);
-router.delete("/product/:id", createProductDel.handle);
-router.put("/product", createUpadate.handle);
-router.get("/product", findProduct.handle);
-router.get("/productcategory", findProductCategory.handle);
-router.get("/productcategoryid/:id", findProductCategoryId.handle);
+router.post("/product", autenticarToken, createProduct.handle);
+router.delete("/product/:id", autenticarToken, createProductDel.handle);
+router.put("/product", autenticarToken, createUpadate.handle);
+router.get("/product", autenticarToken, findProduct.handle);
+router.get("/productcategory", autenticarToken, findProductCategory.handle);
+router.get("/productcategoryid/:id", autenticarToken, findProductCategoryId.handle);
 
 /*=================================== ROTA DE CATEGORY =============================*/
-router.get("/category", findCategory.handle);
-router.post("/category", createCategory.handle);
-router.put("/category", createCategoryUpdate.handle);
+router.get("/category", autenticarToken, findCategory.handle);
+router.post("/category", autenticarToken, createCategory.handle);
+router.put("/category", autenticarToken, createCategoryUpdate.handle);
 
 /*=================================== ROTA DE REALACIONAMENTO =============================*/
-router.delete("/category/:id", createCategoryDel.handle);
-router.delete("/categoryrelations/:id", createCategoryDeleteR.handle);
-router.get("/category/:id", findCategoryRelationId.handle);
-router.get("/categorypr", findCategoryRelation.handle);
-router.post("/categorypr", createProductCategory.handle);
-router.post("/productwithcategory", createProductCategoryExist.handle);
-router.put("/productwithcategoryput", createProductCategoryExistPut.handle);
-router.get("/producttodos", FindProductRealationTodosList.handle);
+router.delete("/category/:id", autenticarToken, createCategoryDel.handle);
+router.delete("/categoryrelations/:id", autenticarToken, createCategoryDeleteR.handle);
+router.get("/category/:id", autenticarToken, findCategoryRelationId.handle);
+router.get("/categorypr", autenticarToken, findCategoryRelation.handle);
+router.post("/categorypr", autenticarToken, createProductCategory.handle);
+router.post("/productwithcategory", autenticarToken, createProductCategoryExist.handle);
+router.put("/productwithcategoryput", autenticarToken, createProductCategoryExistPut.handle);
+router.get("/producttodos", autenticarToken, FindProductRealationTodosList.handle);
 
 /*=================================== ROTA DE USERS =============================*/
 
@@ -228,12 +245,12 @@ const loginUser = new ControllerLogin()
 
 router.post("/login", loginUser.handle);
 //router.use(authUser.handle);
-router.post("/user", createUser.handle);
-router.put("/user", updateUser.handle);
-router.delete("/user/:id", deleteUser.handle);
-router.get("/user", findUser.handle);
-router.get("/usersadress", findUserAdress.handle);
-router.get("/user/:id", findUserId.handle);
+router.post("/user", autenticarToken, createUser.handle);
+router.put("/user", autenticarToken, updateUser.handle);
+router.delete("/user/:id", autenticarToken, deleteUser.handle);
+router.get("/user", autenticarToken, findUser.handle);
+router.get("/usersadress", autenticarToken, findUserAdress.handle);
+router.get("/user/:id", autenticarToken, findUserId.handle);
 
 /* ============================== OBJETO CRIADOS PARA ROTAS ADRESS ====================== */
 const createAdress = new CreateAdressUser()
@@ -244,52 +261,57 @@ const updateAdress = new UpdateAdressUser()
 const relationUserAdress = new ControllerRelationsUserAdress()
 
 /* ============================= ROTAS DE ADRESS =============================== */
-router.post("/adress", createAdress.handle)
-router.get("/adress", findAdress.handle)
-router.put("/adress", updateAdress.handle)
+router.post("/adress", autenticarToken, createAdress.handle)
+router.get("/adress", autenticarToken, findAdress.handle)
+router.put("/adress", autenticarToken, updateAdress.handle)
 
 /* ============================= ROTAS DE ADRESS =============================== */
 /* ============================= ROTAS DE ADRESS =============================== */
-router.post("/comentario", createComentario.handle)
-router.post("/comentariorelation", createComentarioRelation.handle)
-router.get("/comentario", findComentario.handle)
-router.get("/comentariorelation", findComentarioRelation.handle)
-router.put("/comentario", updateComentario.handle)
-router.delete("/comentario/:id", deleteComentario.handle)
-router.delete("/comentariorelation/:id", deleteComentarioRelation.handle)
+router.post("/comentario", autenticarToken, createComentario.handle)
+router.post("/comentariorelation", autenticarToken, createComentarioRelation.handle)
+router.get("/comentario", autenticarToken, findComentario.handle)
+router.get("/comentariorelation", autenticarToken, findComentarioRelation.handle)
+router.put("/comentario", autenticarToken, updateComentario.handle)
+router.delete("/comentario/:id", autenticarToken, deleteComentario.handle)
+router.delete("/comentariorelation/:id",autenticarToken,  deleteComentarioRelation.handle)
 
 /* ============================= ROTAS DE ADRESS =============================== */
-router.post("/favorito", createFavorito.handle)
-router.get("/favorito", findFavorito.handle)
-router.put("/favorito", updateFavorito.handle)
-router.delete("/favorito/:id", deleteFavorito.handle)
+router.post("/favorito", autenticarToken, createFavorito.handle)
+router.get("/favorito", autenticarToken, findFavorito.handle)
+router.put("/favorito", autenticarToken, updateFavorito.handle)
+router.delete("/favorito/:id", autenticarToken, deleteFavorito.handle)
 
 
 /* ============================= ROTAS DE REATION_USER_ADRESS =============================== */
-router.post("/relationuseradress", relationUserAdress.handle)
-router.get("/relationuseradress", findAdressUersRealations.handle)
-router.get("/relationuseradress/:id", findAdressUersRealationsid.handle)
+router.post("/relationuseradress", autenticarToken, relationUserAdress.handle)
+router.get("/relationuseradress", autenticarToken, findAdressUersRealations.handle)
+router.get("/relationuseradress/:id", autenticarToken, findAdressUersRealationsid.handle)
+
+// Rota protegida
+router.get('/protegido', autenticarToken, (req, res) => {
+    res.send('Você acessou a rota protegida!');
+});
 
 /* ============================= ROTAS DE COMPRAS =============================== */
-router.post("/compra", createCompra.handle);
-router.post("/compra1", createCompra1.handle);
-router.post("/compra2", createCompra2.handle);
-router.post("/compra3", createCompra3.handle);
-router.post("/compra4", createCompra4.handle);
-router.post("/comprarelations", createCompraRealtion.handle);
-router.get("/comprarelations", createCompraFindRelations.handle);
-router.get("/compra", createCompraFind.handle);
-router.get("/compra1", createCompraFind1.handle);
-router.get("/compra2", createCompraFind2.handle);
-router.get("/compra3", createCompraFind3.handle);
-router.get("/compra4", createCompraFind4.handle);
-router.put("/compraupdate", createCompraUpdate.handle);
-router.delete("/compra/:id", createCompraDelete.handle);
-router.delete("/compra1/:id", createCompraDelete1.handle);
-router.delete("/compra2/:id", createCompraDelete2.handle);
-router.delete("/compra3/:id", createCompraDelete3.handle);
-router.delete("/compra4/:id", createCompraDelete4.handle);
-router.delete("/comprarelations/:id", createDeleteRelation.handle);
+router.post("/compra", autenticarToken, createCompra.handle);
+router.post("/compra1", autenticarToken, createCompra1.handle);
+router.post("/compra2", autenticarToken, createCompra2.handle);
+router.post("/compra3", autenticarToken, createCompra3.handle);
+router.post("/compra4", autenticarToken, createCompra4.handle);
+router.post("/comprarelations", autenticarToken, createCompraRealtion.handle);
+router.get("/comprarelations", autenticarToken, createCompraFindRelations.handle);
+router.get("/compra", autenticarToken, createCompraFind.handle);
+router.get("/compra1", autenticarToken, createCompraFind1.handle);
+router.get("/compra2", autenticarToken, createCompraFind2.handle);
+router.get("/compra3", autenticarToken, createCompraFind3.handle);
+router.get("/compra4", autenticarToken, createCompraFind4.handle);
+router.put("/compraupdate", autenticarToken, createCompraUpdate.handle);
+router.delete("/compra/:id", autenticarToken, createCompraDelete.handle);
+router.delete("/compra1/:id", autenticarToken, createCompraDelete1.handle);
+router.delete("/compra2/:id", autenticarToken, createCompraDelete2.handle);
+router.delete("/compra3/:id", autenticarToken, createCompraDelete3.handle);
+router.delete("/compra4/:id", autenticarToken, createCompraDelete4.handle);
+router.delete("/comprarelations/:id", autenticarToken, createDeleteRelation.handle);
 
 /* ============================= ROTAS DE REATION_USER_ADRESS =============================== */
 
