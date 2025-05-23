@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction  } from "express";
 import jwt from 'jsonwebtoken';
 
-// Token fixo (exemplo)
+// Token fixo (exemplo: api já ta rodando)
 const TOKEN_FIXO = process.env.TOKEN_PROTECTION;
 
 function autenticarToken(req: Request, res: Response, next: NextFunction) {
